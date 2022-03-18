@@ -44,7 +44,6 @@ void sortFScore(DynamicArray<NodeGraph::Node*>& nodes)
 
 DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 {
-	DynamicArray<Node*> openList = DynamicArray<Node*>();
 	DynamicArray<Node*> closedList = DynamicArray<Node*>();
 	DynamicArray<Node*> path = DynamicArray<Node*>();
 	NodeGraph::Node* currNode = start;
@@ -61,13 +60,43 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 		}
 
 		// Compare the g-scores
-		// If one of the g-scores is less than all the others..
-		// place the current node in the closed list
-		// set the current node to be the node that has the lowest g-score
+		float currGScore = 0;
+		NodeGraph:: Node* lowestNode = currNode->edges[0].target;
+
+		for (int i = 0; i < currNode->edges.getLength(); i++)
+		{
+			//Make sure the closedList doesn't contain the target at index of i
+			if (!closedList.contains(currNode->edges[i].target))
+			{
+				currGScore = currNode->edges[i].target->gScore;
+
+				//Iterate through the list again using j
+				for (int j = 0; j < currNode->edges.getLength(); j++)
+				{
+					if (!closedList.contains(currNode->edges[j].target))
+					{
+						//If the current gScore is greater than the gscore of the node at the index of j...
+						if (currGScore > currNode->edges[j].target->gScore&& currGScore != currNode->edges[j].target->gScore)
+						{
+							//...Set the lowest Node to be the target at the index of j
+							lowestNode = currNode->edges[j].target;
+						}
+					}
+				}
+			}
+		}
+
+		//place the current node into the closed list
+		closedList.addItem(currNode);
+
+		//Add the current node to the path
+		path.addItem(currNode);
+
+		//Set the current node to be the lowest node
+		currNode = lowestNode;
 	}
 
-	//Insert algorithm here
-	return DynamicArray<NodeGraph::Node*>();
+	return path;
 }
 
 void NodeGraph::drawGraph(Node* start)
