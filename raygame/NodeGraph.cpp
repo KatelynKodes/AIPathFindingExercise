@@ -45,46 +45,24 @@ void sortFScore(DynamicArray<NodeGraph::Node*>& nodes)
 DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 {
 	DynamicArray<Node*> closedList = DynamicArray<Node*>();
+	DynamicArray<Node*> openList = DynamicArray<Node*>();
 	DynamicArray<Node*> path = DynamicArray<Node*>();
 	NodeGraph::Node* currNode = start;
 
 	while (currNode != goal)
 	{
-		// Find the g-Scores
+		//Adding edges to the open list
 		for (int i = 0; i < currNode->edges.getLength(); i++)
 		{
-			if (!closedList.contains(currNode->edges[i].target))
+			if (!closedList.contains(currNode->edges[i].target) && !openList.contains(currNode->edges[i].target))
 			{
-				currNode->edges[i].target->gScore = currNode->gScore + currNode->edges[i].cost;
+				openList.addItem(currNode->edges[i].target);
 			}
 		}
 
 		// Compare the g-scores
 		float currGScore = 0;
 		NodeGraph:: Node* lowestNode = currNode->edges[0].target;
-
-		for (int i = 0; i < currNode->edges.getLength(); i++)
-		{
-			//Make sure the closedList doesn't contain the target at index of i
-			if (!closedList.contains(currNode->edges[i].target))
-			{
-				currGScore = currNode->edges[i].target->gScore;
-
-				//Iterate through the list again using j
-				for (int j = 0; j < currNode->edges.getLength(); j++)
-				{
-					if (!closedList.contains(currNode->edges[j].target))
-					{
-						//If the current gScore is greater than the gscore of the node at the index of j...
-						if (currGScore > currNode->edges[j].target->gScore&& currGScore != currNode->edges[j].target->gScore)
-						{
-							//...Set the lowest Node to be the target at the index of j
-							lowestNode = currNode->edges[j].target;
-						}
-					}
-				}
-			}
-		}
 
 		//place the current node into the closed list
 		closedList.addItem(currNode);
