@@ -44,7 +44,28 @@ void sortFScore(DynamicArray<NodeGraph::Node*>& nodes)
 
 DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 {
-	
+	DynamicArray<Node*> openList = DynamicArray<Node*>();
+	DynamicArray<Node*> closedList = DynamicArray<Node*>();
+	DynamicArray<Node*> path = DynamicArray<Node*>();
+	NodeGraph::Node* currNode = start;
+
+	while (currNode != goal)
+	{
+		// Find the g-Scores
+		for (int i = 0; i < currNode->edges.getLength(); i++)
+		{
+			if (!closedList.contains(currNode->edges[i].target))
+			{
+				currNode->edges[i].target->gScore = currNode->gScore + currNode->edges[i].cost;
+			}
+		}
+
+		// Compare the g-scores
+		// If one of the g-scores is less than all the others..
+		// place the current node in the closed list
+		// set the current node to be the node that has the lowest g-score
+	}
+
 	//Insert algorithm here
 	return DynamicArray<NodeGraph::Node*>();
 }
