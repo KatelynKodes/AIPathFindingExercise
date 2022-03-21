@@ -13,10 +13,14 @@ public:
 	void start() override;
 	void update(float deltaTime) override;
 
+	int getCollectCount() { return m_collectCount; }
+	void setCollectCount(int value) { m_collectCount = value; }
+
 	void onCollision(Actor* actor) override;
 
 private:
 	SpriteComponent* m_spriteComponent;
 	InputComponent* m_input;
+	int m_collectCount = 0;
 };
 

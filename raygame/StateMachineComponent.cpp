@@ -26,32 +26,4 @@ void StateMachineComponent::update(float deltaTime)
 	float distanceFromTarget = (targetPos - ownerPos).getMagnitude();
 
 	bool targetInRange = distanceFromTarget <= m_seekRange;
-
-	switch (m_currentState)
-	{
-	case IDLE:
-		m_seekComponent->setSteeringForce(0);
-		m_wanderComponent->setSteeringForce(0);
-
-		if (targetInRange)
-			setCurrentState(SEEK);
-
-		break;
-	case WANDER:
-		m_seekComponent->setSteeringForce(0);
-		m_wanderComponent->setSteeringForce(m_wanderForce);
-
-		if (targetInRange)
-			setCurrentState(SEEK);
-
-		break;
-	case SEEK:
-		m_seekComponent->setSteeringForce(m_seekForce);
-		m_wanderComponent->setSteeringForce(0);
-
-		if (!targetInRange)
-			setCurrentState(WANDER);
-
-		break;
-	}
 }

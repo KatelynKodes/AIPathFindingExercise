@@ -6,6 +6,7 @@
 #include "PathfindComponent.h"
 #include "MoveComponent.h"
 #include "SpriteComponent.h"
+#include "Player.h"
 
 Ghost::Ghost(float x, float y, float maxSpeed, float maxForce, int color, Maze* maze)
 	: Agent(x, y, "Ghost", maxSpeed, maxForce)
@@ -27,6 +28,9 @@ Ghost::~Ghost()
 void Ghost::update(float deltaTime)
 {
 	Agent::update(deltaTime);
+
+	//if all the collectables have been collected
+	// set the state of the enemy to flee
 }
 
 void Ghost::draw()
@@ -48,6 +52,14 @@ void Ghost::onCollision(Actor* other)
 		getTransform()->setWorldPostion(tilePosition);
 
 		getMoveComponent()->setVelocity({ 0, 0 });
+	}
+	else if (Player* player = dynamic_cast<Player*>(other))
+	{
+		// If player collectCount == 4
+		if (player->getCollectCount() == 4)
+		{
+			// Destroy the ghost
+		}
 	}
 }
 
