@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include <Vector2.h>
 #include <cmath>
-#include "ActorArray.h"
+#include "DynamicArray.h"
 class Camera2D;
 
 static class Engine
@@ -90,6 +90,8 @@ public:
     /// </summary>
     static int getScreenHeight() { return m_screenHeight; }
 
+    static const float getFixedTimeStep() { return m_fixedTimeStep; }
+
     /// <summary>
     /// Begins the application.
     /// </summary>
@@ -98,6 +100,7 @@ public:
 private:
     void start();
     void update(float delaTime);
+    void fixedUpdate(float fixedDeltaTime);
     void draw();
     void end();
 
@@ -109,4 +112,5 @@ private:
     static int m_currentSceneIndex;
     static const int m_screenWidth = 700;
     static const int m_screenHeight = 800;
+    static const float m_fixedTimeStep;
 };

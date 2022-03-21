@@ -1,7 +1,7 @@
 #pragma once
 #include <Matrix3.h>
 #include "Actor.h"
-#include "ActorArray.h"
+#include "DynamicArray.h"
 
 class Scene
 {
@@ -68,6 +68,7 @@ public:
 
     virtual void update(float deltaTime);
     virtual void updateUI(float deltaTime);
+    virtual void fixedUpdate(float fixedDeltaTime);
 
     virtual void draw();
     virtual void drawUI();

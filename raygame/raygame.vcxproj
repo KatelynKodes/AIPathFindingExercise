@@ -148,7 +148,6 @@
   <ItemGroup>
     <ClCompile Include="AABBCollider.cpp" />
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="ActorArray.cpp" />
     <ClCompile Include="Agent.cpp" />
     <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -163,6 +162,7 @@
     <ClCompile Include="NodeGraph.cpp" />
     <ClCompile Include="PathfindComponent.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerMoveComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SeekComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -174,7 +174,7 @@
   <ItemGroup>
     <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="ActorArray.h" />
+    <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Agent.h" />
     <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="Collider.h" />
@@ -188,6 +188,7 @@
     <ClInclude Include="NodeGraph.h" />
     <ClInclude Include="PathfindComponent.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerMoveComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SeekComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
