@@ -81,6 +81,9 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 					currentNode->edges[i].target->gScore = gScore;
 					//..add the item to the list
 					openList.addItem(currentNode->edges[i].target);
+
+					//Set it's previous to be it's current node
+					currentNode->edges[i].target->previous = currentNode;
 				}
 				//Else...
 				else
@@ -90,6 +93,9 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 					{
 						//...set the targets gscore to be the current gscore
 						currentNode->edges[i].target->gScore = gScore;
+
+						//Set it's previous to be it's current node
+						currentNode->edges[i].target->previous = currentNode;
 					}
 				}
 			}
