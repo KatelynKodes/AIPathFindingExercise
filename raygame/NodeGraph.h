@@ -38,5 +38,5 @@ namespace NodeGraph
 	void resetGraphScore(Node* start);
 	void resetConnectedNodes(Node* node, DynamicArray<Node*>& resetList);
 
-	float manhattanDistance();
+	float manhattanDistance(Node* node1, Node* node2);
 }

@@ -172,7 +172,7 @@ void NodeGraph::resetConnectedNodes(Node* node, DynamicArray<Node*>& resetList)
 	}
 }
 
-float NodeGraph::manhattanDistance()
+float NodeGraph::manhattanDistance(Node* node1, Node* node2)
 {
-	return 0.0f;
+	return abs(node1->position.x);
 }
