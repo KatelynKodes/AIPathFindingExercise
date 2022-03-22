@@ -38,6 +38,7 @@ void Collectable::start()
 
 void Collectable::update(float deltaTime)
 {
+
 }
 
 void Collectable::onCollision(Actor* other)

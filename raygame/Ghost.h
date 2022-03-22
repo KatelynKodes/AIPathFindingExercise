@@ -33,6 +33,6 @@ private:
 	PathfindComponent* m_pathfindComponent;
 	Maze* m_maze;
 	Actor* m_target = nullptr;
-	DynamicArray<Actor*> m_collectables
+	DynamicArray<Actor*> m_collectables;
 };
 
