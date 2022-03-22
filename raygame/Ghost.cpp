@@ -29,8 +29,10 @@ void Ghost::update(float deltaTime)
 {
 	Agent::update(deltaTime);
 
-	//if all the collectables have been collected
-	// set the state of the enemy to flee
+	//If all the collectables have been collected
+		// set the state of the enemy to flee
+	//If the collectables have not been collected and the enemy is not currently chasing a collectable
+		// Randomly select a collectables from the enemy's dynamic array
 }
 
 void Ghost::draw()
@@ -53,7 +55,8 @@ void Ghost::onCollision(Actor* other)
 
 		getMoveComponent()->setVelocity({ 0, 0 });
 	}
-	else if (Player* player = dynamic_cast<Player*>(other))
+
+	if (Player* player = dynamic_cast<Player*>(other))
 	{
 		// If player collectCount == 4
 		if (player->getCollectCount() == 4)
