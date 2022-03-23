@@ -7,6 +7,7 @@
 #include "MoveComponent.h"
 #include "SpriteComponent.h"
 #include "Player.h"
+#include "Collectable.h"
 
 Ghost::Ghost(float x, float y, float maxSpeed, float maxForce, int color, Maze* maze)
 	: Agent(x, y, "Ghost", maxSpeed, maxForce)
@@ -63,6 +64,10 @@ void Ghost::onCollision(Actor* other)
 		{
 			// Destroy the ghost
 		}
+	}
+	else if (Collectable* collectable = dynamic_cast<Collectable*>(other))
+	{
+		//Destroy the collectable, set a new target for the collector
 	}
 }
 

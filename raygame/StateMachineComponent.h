@@ -3,7 +3,7 @@
 
 enum State
 {
-	IDLE,
+	FLEE,
 	WANDER,
 	SEEK
 };
@@ -28,6 +28,5 @@ private:
 	WanderComponent* m_wanderComponent;
 	float m_seekForce;
 	float m_wanderForce;
-	float m_seekRange = 300;
 };
 

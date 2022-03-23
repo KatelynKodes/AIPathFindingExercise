@@ -3,6 +3,7 @@
 
 class Maze;
 class PathfindComponent;
+class StateMachineComponent;
 
 class Collectable :
     public Agent
@@ -16,6 +17,8 @@ public:
     void setTarget(Actor* target);
     Actor* getTarget() { return m_target; }
 
+    bool EnemyInRange();
+
     void start() override;
     void update(float deltaTime) override;
 
@@ -25,7 +28,8 @@ private:
     PathfindComponent* m_pathFindComponent;
     Maze* m_maze;
     Actor* m_target; 
-
+    
     bool m_collected;
+    float m_seekRange = 300;
 };
 

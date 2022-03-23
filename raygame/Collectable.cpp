@@ -5,7 +5,10 @@
 #include "Transform2D.h"
 #include "PathfindComponent.h"
 #include "MoveComponent.h"
+#include "SeekComponent.h"
+#include "WanderComponent.h"
 #include "SpriteComponent.h"
+#include "StateMachineComponent.h"
 #include "Player.h"
 
 Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int color, Maze* maze):
@@ -23,6 +26,11 @@ Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int c
 
 	//Add the sprite component
 	addComponent(new SpriteComponent("Images/enemy.png"));
+
+	//Adding wander, flee, and seek components
+	addComponent<SeekComponent>();
+	addComponent<WanderComponent>();
+
 }
 
 void Collectable::setTarget(Actor* target)
@@ -31,14 +39,46 @@ void Collectable::setTarget(Actor* target)
 	m_pathFindComponent->setTarget(m_target);
 }
 
+bool Collectable::EnemyInRange()
+{
+	MathLibrary::Vector2 targetPos = getComponent<SeekComponent>()->getTarget()->getTransform()->getWorldPosition();
+	MathLibrary::Vector2 ownerPos = getTransform()->getWorldPosition();
+	float distanceFromTarget = (targetPos - ownerPos).getMagnitude();
+	bool targetInRange = distanceFromTarget <= m_seekRange;
+
+	return targetInRange;
+}
+
 void Collectable::start()
 {
-	
+	Agent::start();
+
+	addComponent<StateMachineComponent>();
+	getComponent<StateMachineComponent>()->setCurrentState(WANDER);
+	getComponent<StateMachineComponent>()->start();
 }
 
 void Collectable::update(float deltaTime)
 {
+	Agent::update(deltaTime);
 
+	if (EnemyInRange() && !getCollected())
+	{
+		getComponent<StateMachineComponent>()->setCurrentState(FLEE);
+	}
+	else
+	{
+		if (getCollected())
+		{
+			getComponent<StateMachineComponent>()->setCurrentState(SEEK);
+		}
+		else
+		{
+			getComponent<StateMachineComponent>()->setCurrentState(WANDER);
+		}
+	}
+
+	getComponent<StateMachineComponent>()->update(deltaTime);
 }
 
 void Collectable::onCollision(Actor* other)
