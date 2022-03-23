@@ -30,6 +30,14 @@ void Ghost::update(float deltaTime)
 {
 	Agent::update(deltaTime);
 
+	//checks if the maze's collectable length is greater than the current collectables
+	if (m_maze->getCollectables().getLength() > getCollectables().getLength())
+	{
+		//Set the collectables to be the maze's collectables
+		setCollectables(m_maze->getCollectables());
+		setTarget();
+	}
+
 	//If all the collectables have been collected
 		// set the state of the enemy to flee
 	//If the collectables have not been collected and the enemy is not currently chasing a collectable
@@ -82,10 +90,31 @@ void Ghost::setTarget(Actor* target)
 
 void Ghost::setTarget()
 {
-	//randomly select an integer between 0 and the dynamic array's length
+	if (getCollectables().getLength() != 0)
+	{
+		//randomly select an integer between 0 and the dynamic array's length
+		int index = rand() % getCollectables().getLength();
 
-	// if the collectable isn't collected...
-	// set the target
+		// if the collectable isn't collected...
+		if (!getCollectables()[index]->getCollected())
+			// set the target
+			setTarget(getCollectables()[index]);
+	}
+}
+
+void Ghost::setCollectables(DynamicArray<Collectable*> collectableList)
+{
+	m_collectables.clear();
+
+	for (int i = 0; i < collectableList.getLength(); i++)
+	{
+		m_collectables.addItem(collectableList[i]);
+	}
+
+	for (int i = 0; i < getCollectables().getLength(); i++)
+	{
+		getCollectables()[i]->setTarget(this);
+	}
 }
 
 Actor* Ghost::getTarget()

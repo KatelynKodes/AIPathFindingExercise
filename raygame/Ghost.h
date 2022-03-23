@@ -35,7 +35,7 @@ public:
 	/// <param name="target">The new target</param>
 	void setTarget();
 
-	void setCollectables(DynamicArray<Collectable*> collectableList) { m_collectables = collectableList; }
+	void setCollectables(DynamicArray<Collectable*> collectableList);
 	DynamicArray<Collectable*> getCollectables() { return m_collectables; }
 
 private:

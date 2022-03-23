@@ -68,6 +68,12 @@ public:
 	/// <returns>A Vector2 with the position of the tile</returns>
 	MathLibrary::Vector2 getPosition(Tile tile);
 
+	/// <summary>
+	/// Gets all the the collectable objects in the maze
+	/// </summary>
+	/// <returns>A Dynamic Array with all the collectable objects in the maze</returns>
+	DynamicArray<Collectable*> getCollectables() { return m_collectableObjects; }
+
 protected:
 	/// <summary>
 	/// Create a tile from a given key. If an actor is created, it is added to the scene.
@@ -88,6 +94,6 @@ private:
 	Tile m_grid[WIDTH][HEIGHT];
 
 	Player* m_player;
-	DynamicArray<Collectable*> m_collectables;
+	DynamicArray<Collectable*> m_collectableObjects;
 };
 

@@ -30,19 +30,26 @@ Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int c
 
 	//Adding wander, flee, and seek components
 	addComponent<SeekComponent>();
+	getComponent<SeekComponent>()->setSteeringForce(50);
+
 	addComponent<WanderComponent>();
+	addComponent<WanderComponent>()->setSteeringForce(50);
+
 	addComponent<FleeComponent>();
+	getComponent<SeekComponent>()->setSteeringForce(50);
 }
 
 void Collectable::setTarget(Actor* target)
 {
 	m_target = target;
-	m_pathFindComponent->setTarget(m_target);
 }
 
 bool Collectable::EnemyInRange()
 {
-	MathLibrary::Vector2 targetPos = getComponent<SeekComponent>()->getTarget()->getTransform()->getWorldPosition();
+	if (!getComponent<SeekComponent>()->getTarget())
+		return false;
+
+	MathLibrary::Vector2 targetPos = getTarget()->getTransform()->getWorldPosition();
 	MathLibrary::Vector2 ownerPos = getTransform()->getWorldPosition();
 	float distanceFromTarget = (targetPos - ownerPos).getMagnitude();
 	bool targetInRange = distanceFromTarget <= m_seekRange;
@@ -63,14 +70,20 @@ void Collectable::update(float deltaTime)
 {
 	Agent::update(deltaTime);
 
-	if (EnemyInRange() && !getCollected())
+	bool enemyInRange = EnemyInRange();
+
+	if (enemyInRange && !getCollected())
 	{
+		getComponent<FleeComponent>()->setTarget(getTarget());
+		m_pathFindComponent->setTarget(getComponent<FleeComponent>()->getTarget());
 		getComponent<StateMachineComponent>()->setCurrentState(FLEE);
 	}
 	else
 	{
 		if (getCollected())
 		{
+			getComponent<SeekComponent>()->setTarget(getTarget());
+			m_pathFindComponent->setTarget(getComponent<SeekComponent>()->getTarget());
 			getComponent<StateMachineComponent>()->setCurrentState(SEEK);
 		}
 		else

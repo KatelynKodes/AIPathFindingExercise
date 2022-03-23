@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "MazeScene.h"
 
 enum State
 {

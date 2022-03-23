@@ -125,19 +125,14 @@ Maze::Tile Maze::createTile(int x, int y, TileKey key)
 		tile.cost = 1.0f;
 		Collectable* collectable = new Collectable(position.x, position.y, 100, 50, 0xFF6666FF, this);
 		tile.actor = collectable;
-		m_collectables.addItem(collectable);
+		m_collectableObjects.addItem(collectable);
 		addActor(tile.actor);
 		break;
 	}
 	case TileKey::GHOST:
 	{
 		tile.cost = 1.0f;
-		Ghost* ghost = new Ghost(position.x, position.y, 100, 50, 0xFF6666FF, this);
-		ghost->setCollectables(m_collectables);
-		for (int i = 0; i < ghost->getCollectables().getLength(); i++)
-		{
-			ghost->getCollectables()[i]->setTarget(ghost);
-		}
+		Ghost* ghost = new Ghost(position.x, position.y, 100, 100, 0xFF6666FF, this);
 		ghost->setTarget();
 		tile.actor = ghost;
 		addActor(tile.actor);

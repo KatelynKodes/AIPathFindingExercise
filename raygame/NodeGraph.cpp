@@ -69,33 +69,37 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 		//Iterating through all the current node's neighbors...
 		for (int i = 0; i < currentNode->edges.getLength(); i++)
 		{
-			if (!closedList.contains(currentNode->edges[i].target))
+			//If the node is walkable
+			if (currentNode->edges[i].target->walkable == true)
 			{
-				// Calculate the gscore of the current edge
-				gScore = currentNode->gScore + currentNode->edges[i].cost;
-
-				//if the open list does not contain the current node's target..
-				if (!openList.contains(currentNode->edges[i].target))
+				if (!closedList.contains(currentNode->edges[i].target))
 				{
-					//Set the node's gscore to be the gscore variable
-					currentNode->edges[i].target->gScore = gScore;
-					//..add the item to the list
-					openList.addItem(currentNode->edges[i].target);
+					// Calculate the gscore of the current edge
+					gScore = currentNode->gScore + currentNode->edges[i].cost;
 
-					//Set it's previous to be it's current node
-					currentNode->edges[i].target->previous = currentNode;
-				}
-				//Else...
-				else
-				{
-					//If current node's gscore is greater than the current gscore...
-					if (currentNode->edges[i].target->gScore > gScore)
+					//if the open list does not contain the current node's target..
+					if (!openList.contains(currentNode->edges[i].target))
 					{
-						//...set the targets gscore to be the current gscore
+						//Set the node's gscore to be the gscore variable
 						currentNode->edges[i].target->gScore = gScore;
+						//..add the item to the list
+						openList.addItem(currentNode->edges[i].target);
 
 						//Set it's previous to be it's current node
 						currentNode->edges[i].target->previous = currentNode;
+					}
+					//Else...
+					else
+					{
+						//If current node's gscore is greater than the current gscore...
+						if (currentNode->edges[i].target->gScore > gScore)
+						{
+							//...set the targets gscore to be the current gscore
+							currentNode->edges[i].target->gScore = gScore;
+
+							//Set it's previous to be it's current node
+							currentNode->edges[i].target->previous = currentNode;
+						}
 					}
 				}
 			}
