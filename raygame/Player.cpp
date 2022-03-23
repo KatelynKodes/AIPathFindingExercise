@@ -9,6 +9,7 @@
 #include "Agent.h"
 #include "Collider.h"
 #include "InputComponent.h";
+#include "Collectable.h"
 
 void Player::start()
 {
@@ -45,5 +46,11 @@ void Player::onCollision(Actor* other)
 		tilePosition = tilePosition - halfTile;
 		//getTransform()->setWorldPostion(getTransform()->getWorldPosition() - getMoveComponent()->getVelocity().getNormalized() * -.05f);
 		applyForce(getCollider()->getCollisionNormal() * -1 * getMoveComponent()->getVelocity().getMagnitude());
+	}
+
+	if (Collectable* collectable = dynamic_cast<Collectable*>(other))
+	{
+		collectable->setTarget(this);
+		collectable->setCollected(true);
 	}
 }

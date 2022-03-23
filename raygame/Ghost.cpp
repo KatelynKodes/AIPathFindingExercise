@@ -35,7 +35,6 @@ void Ghost::update(float deltaTime)
 	{
 		//Set the collectables to be the maze's collectables
 		setCollectables(m_maze->getCollectables());
-		setTarget();
 	}
 
 	//If all the collectables have been collected

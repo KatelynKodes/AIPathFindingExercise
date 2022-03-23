@@ -3,6 +3,9 @@
 
 class Maze;
 class PathfindComponent;
+class SeekComponent;
+class WanderComponent;
+class FleeComponent;
 class StateMachineComponent;
 
 class Collectable :
@@ -26,10 +29,13 @@ public:
 
 private:
     PathfindComponent* m_pathFindComponent;
+    WanderComponent* m_wanderComponent;
+    FleeComponent* m_fleeComponent;
+    SeekComponent* m_seekComponent;
     Maze* m_maze;
     Actor* m_target;
     
     bool m_collected;
-    float m_seekRange = 300;
+    float m_seekRange = 100;
 };
 

@@ -3,6 +3,7 @@
 #include "Wall.h"
 #include "raylib.h"
 #include "Transform2D.h"
+#include "AABBCollider.h"
 #include "PathfindComponent.h"
 #include "MoveComponent.h"
 #include "SeekComponent.h"
@@ -10,7 +11,6 @@
 #include "FleeComponent.h"
 #include "SpriteComponent.h"
 #include "StateMachineComponent.h"
-#include "Player.h"
 
 Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int color, Maze* maze):
 	Agent(x,y,"Collectable", maxSpeed, maxForce)
@@ -25,18 +25,19 @@ Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int c
 	m_pathFindComponent->setColor(color);
 	addComponent(m_pathFindComponent);
 
+	m_fleeComponent = new FleeComponent();
+	m_fleeComponent->setSteeringForce(500);
+	addComponent(m_fleeComponent);
+
+	m_wanderComponent = new WanderComponent(5, 5, 500);
+	addComponent(m_wanderComponent);
+
+	m_seekComponent = new SeekComponent();
+	m_seekComponent->setSteeringForce(500);
+	addComponent(m_seekComponent);
+
 	//Add the sprite component
 	addComponent(new SpriteComponent("Images/enemy.png"));
-
-	//Adding wander, flee, and seek components
-	addComponent<SeekComponent>();
-	getComponent<SeekComponent>()->setSteeringForce(50);
-
-	addComponent<WanderComponent>();
-	addComponent<WanderComponent>()->setSteeringForce(50);
-
-	addComponent<FleeComponent>();
-	getComponent<SeekComponent>()->setSteeringForce(50);
 }
 
 void Collectable::setTarget(Actor* target)
@@ -46,7 +47,7 @@ void Collectable::setTarget(Actor* target)
 
 bool Collectable::EnemyInRange()
 {
-	if (!getComponent<SeekComponent>()->getTarget())
+	if (!getTarget())
 		return false;
 
 	MathLibrary::Vector2 targetPos = getTarget()->getTransform()->getWorldPosition();
@@ -61,9 +62,13 @@ void Collectable::start()
 {
 	Agent::start();
 
+	//Add the state machine components
 	addComponent<StateMachineComponent>();
-	getComponent<StateMachineComponent>()->setCurrentState(WANDER);
-	getComponent<StateMachineComponent>()->start();
+	getComponent<StateMachineComponent>()->setCurrentState(WANDER); //Set the current state to wander
+	getComponent<StateMachineComponent>()->start(); //Call start function
+
+	//set collider for the collectable so it can be collided with
+	setCollider(new AABBCollider(Maze::TILE_SIZE, Maze::TILE_SIZE, this));
 }
 
 void Collectable::update(float deltaTime)
@@ -71,19 +76,18 @@ void Collectable::update(float deltaTime)
 	Agent::update(deltaTime);
 
 	bool enemyInRange = EnemyInRange();
+	bool collected = getCollected();
 
-	if (enemyInRange && !getCollected())
+	if (enemyInRange && !collected)
 	{
 		getComponent<FleeComponent>()->setTarget(getTarget());
-		m_pathFindComponent->setTarget(getComponent<FleeComponent>()->getTarget());
 		getComponent<StateMachineComponent>()->setCurrentState(FLEE);
 	}
 	else
 	{
-		if (getCollected())
+		if (collected)
 		{
-			getComponent<SeekComponent>()->setTarget(getTarget());
-			m_pathFindComponent->setTarget(getComponent<SeekComponent>()->getTarget());
+			getComponent<SeekComponent>()->setTarget(m_target);
 			getComponent<StateMachineComponent>()->setCurrentState(SEEK);
 		}
 		else
@@ -110,11 +114,5 @@ void Collectable::onCollision(Actor* other)
 		getTransform()->setWorldPostion(tilePosition);
 
 		getMoveComponent()->setVelocity({ 0, 0 });
-	}
-
-	if (Player* player = dynamic_cast<Player*>(other))
-	{
-		setTarget(player);
-		setCollected(true);
 	}
 }
