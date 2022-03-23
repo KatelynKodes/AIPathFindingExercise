@@ -95,8 +95,11 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="FleeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
     <ClCompile Include="Collectable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,8 +178,11 @@
     <ClInclude Include="Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="FleeComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
     <ClInclude Include="Collectable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Actors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

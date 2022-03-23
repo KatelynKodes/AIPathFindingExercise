@@ -29,10 +29,19 @@ public:
 	/// <param name="target">The new target</param>
 	void setTarget(Actor* target);
 
+	/// <summary>
+	/// Set the target of the ghost
+	/// </summary>
+	/// <param name="target">The new target</param>
+	void setTarget();
+
+	void setCollectables(DynamicArray<Collectable*> collectableList) { m_collectables = collectableList; }
+	DynamicArray<Collectable*> getCollectables() { return m_collectables; }
+
 private:
 	PathfindComponent* m_pathfindComponent;
 	Maze* m_maze;
 	Actor* m_target = nullptr;
-	DynamicArray<Actor*> m_collectables;
+	DynamicArray<Collectable*> m_collectables;
 };
 

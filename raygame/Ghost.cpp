@@ -67,14 +67,25 @@ void Ghost::onCollision(Actor* other)
 	}
 	else if (Collectable* collectable = dynamic_cast<Collectable*>(other))
 	{
-		//Destroy the collectable, set a new target for the collector
+		if (!collectable->getCollected())
+		{
+			//Destroy the collectable, set a new target for the collector
+		}
 	}
 }
 
 void Ghost::setTarget(Actor* target)
 {
 	m_target = target;
-	m_pathfindComponent->setTarget(target);
+	m_pathfindComponent->setTarget(m_target);
+}
+
+void Ghost::setTarget()
+{
+	//randomly select an integer between 0 and the dynamic array's length
+
+	// if the collectable isn't collected...
+	// set the target
 }
 
 Actor* Ghost::getTarget()

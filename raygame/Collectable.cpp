@@ -7,6 +7,7 @@
 #include "MoveComponent.h"
 #include "SeekComponent.h"
 #include "WanderComponent.h"
+#include "FleeComponent.h"
 #include "SpriteComponent.h"
 #include "StateMachineComponent.h"
 #include "Player.h"
@@ -30,7 +31,7 @@ Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int c
 	//Adding wander, flee, and seek components
 	addComponent<SeekComponent>();
 	addComponent<WanderComponent>();
-
+	addComponent<FleeComponent>();
 }
 
 void Collectable::setTarget(Actor* target)

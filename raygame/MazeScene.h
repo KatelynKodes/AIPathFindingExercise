@@ -2,8 +2,9 @@
 #include "Scene.h"
 #include "NodeGraph.h"
 #include <Vector2.h>
+#include "DynamicArray.h";
 
-
+class Collectable;
 class Player;
 
 /// <summary>
@@ -87,5 +88,6 @@ private:
 	Tile m_grid[WIDTH][HEIGHT];
 
 	Player* m_player;
+	DynamicArray<Collectable*> m_collectables;
 };
 

@@ -4,6 +4,7 @@
 #include "Ghost.h"
 #include "Collectable.h"
 #include "Transform2D.h"
+#include "DynamicArray.h"
 
 Maze::TileKey _ = Maze::TileKey::OPEN;
 Maze::TileKey w = Maze::TileKey::WALL;
@@ -28,7 +29,7 @@ Maze::Maze()
 		{ w, _, _, _, _, _, _, _, _, _, _, _, w, _, w, _, w, w, w, w, w, _, w, w, w, w, _, w },
 		{ w, _, _, _, _, _, _, g, _, _, _, _, _, _, w, _, _, _, _, _, w, _, w, w, w, w, _, w },
 		{ w, _, _, _, _, _, _, _, _, _, _, _, w, _, w, _, w, w, w, w, w, _,w, w, w, w, _, w },
-		{ w, _, _, _, _, _, _, _, _, _, _, _, w, _, w, _, _, _, _, _, w, _, w, w, w, w, _, w },
+		{ w, _, _, _, _, _, _, _, _, _, _, _, w, _, w, _, _, c, _, _, w, _, w, w, w, w, _, w },
 		{ w, _, _, _, _, _, _, _, _, _, _, w, w, _, w, w, w, _, w, w, w, _, _, _, _, _, _, w },
 		{ w, w, _, w, w, w, w, w, _, w, w, w, _, _, _, w, w, _, w, w, w, _, w, w, _, w, _, w },
 		{ w, _, _, _, _, _, _, _, _, _, _, _, _, p, _, _, _, _, _, _, _, _, _, _, _, _, _, w },
@@ -119,20 +120,26 @@ Maze::Tile Maze::createTile(int x, int y, TileKey key)
 		addActor(tile.actor);
 		break;
 	}
-	case TileKey::GHOST:
-	{
-		tile.cost = 1.0f;
-		Ghost* ghost = new Ghost(position.x, position.y, 100, 50, 0xFF6666FF, this);
-		ghost->setTarget(m_player);
-		tile.actor = ghost;
-		addActor(tile.actor);
-		break;
-	}
-	case TileKey:: COLLECTABLE:
+	case TileKey::COLLECTABLE:
 	{
 		tile.cost = 1.0f;
 		Collectable* collectable = new Collectable(position.x, position.y, 100, 50, 0xFF6666FF, this);
 		tile.actor = collectable;
+		m_collectables.addItem(collectable);
+		addActor(tile.actor);
+		break;
+	}
+	case TileKey::GHOST:
+	{
+		tile.cost = 1.0f;
+		Ghost* ghost = new Ghost(position.x, position.y, 100, 50, 0xFF6666FF, this);
+		ghost->setCollectables(m_collectables);
+		for (int i = 0; i < ghost->getCollectables().getLength(); i++)
+		{
+			ghost->getCollectables()[i]->setTarget(ghost);
+		}
+		ghost->setTarget();
+		tile.actor = ghost;
 		addActor(tile.actor);
 		break;
 	}

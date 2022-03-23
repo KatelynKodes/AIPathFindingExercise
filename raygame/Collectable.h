@@ -27,7 +27,7 @@ public:
 private:
     PathfindComponent* m_pathFindComponent;
     Maze* m_maze;
-    Actor* m_target; 
+    Actor* m_target;
     
     bool m_collected;
     float m_seekRange = 300;

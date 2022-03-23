@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "SeekComponent.h"
 #include "WanderComponent.h"
+#include "FleeComponent.h"
 #include "Transform2D.h"
 
 void StateMachineComponent::start()
@@ -13,6 +14,9 @@ void StateMachineComponent::start()
 
 	m_wanderComponent = getOwner()->getComponent<WanderComponent>();
 	m_wanderForce = m_wanderComponent->getSteeringForce();
+
+	m_fleeComponent = getOwner()->getComponent<FleeComponent>();
+	m_fleeForce = m_wanderComponent->getSteeringForce();
 }
 
 void StateMachineComponent::update(float deltaTime)
@@ -22,14 +26,17 @@ void StateMachineComponent::update(float deltaTime)
 	switch (m_currentState)
 	{
 	case FLEE:
+		m_fleeComponent->setSteeringForce(m_fleeForce);
 		m_seekComponent->setSteeringForce(0);
 		m_wanderComponent->setSteeringForce(0);
 		break;
 	case SEEK:
+		m_fleeComponent->setSteeringForce(0);
 		m_seekComponent->setSteeringForce(m_seekForce);
 		m_wanderComponent->setSteeringForce(0);
 		break;
 	case WANDER:
+		m_fleeComponent->setSteeringForce(0);
 		m_seekComponent->setSteeringForce(0);
 		m_wanderComponent->setSteeringForce(m_wanderForce);
 		break;
