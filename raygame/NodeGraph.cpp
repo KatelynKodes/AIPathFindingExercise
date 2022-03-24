@@ -109,8 +109,8 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 
 void NodeGraph::drawGraph(Node* start)
 {
-	DynamicArray<Node*> drawnList = DynamicArray<Node*>();
-	drawConnectedNodes(start, drawnList);
+	//DynamicArray<Node*> drawnList = DynamicArray<Node*>();
+	//drawConnectedNodes(start, drawnList);
 }
 
 void NodeGraph::drawNode(Node* node, float size)

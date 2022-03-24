@@ -29,6 +29,12 @@ void StateMachineComponent::update(float deltaTime)
 
 	switch (m_currentState)
 	{
+	case DEAD:
+		m_pathfindComponent->setEnabled(false);
+		m_fleeComponent->setSteeringForce(0);
+		m_seekComponent->setSteeringForce(0);
+		m_wanderComponent->setSteeringForce(0);
+		break;
 	case FLEE:
 		m_pathfindComponent->setEnabled(false);
 		m_fleeComponent->setSteeringForce(m_fleeForce);

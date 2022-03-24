@@ -40,6 +40,14 @@ Collectable::Collectable(float x, float y, float maxSpeed, float maxForce, int c
 	addComponent(new SpriteComponent("Images/enemy.png"));
 }
 
+Collectable::~Collectable()
+{
+	delete m_fleeComponent;
+	delete m_pathFindComponent;
+	delete m_seekComponent;
+	Actor::~Actor();
+}
+
 void Collectable::setTarget(Actor* target)
 {
 	m_target = target;
@@ -62,6 +70,8 @@ void Collectable::start()
 {
 	Agent::start();
 
+	m_isdead = false;
+
 	//Add the state machine components
 	addComponent<StateMachineComponent>();
 	getComponent<StateMachineComponent>()->setCurrentState(WANDER); //Set the current state to wander
@@ -78,21 +88,28 @@ void Collectable::update(float deltaTime)
 	bool enemyInRange = EnemyInRange();
 	bool collected = getCollected();
 
-	if (enemyInRange && !collected)
+	if (m_isdead)
 	{
-		getComponent<FleeComponent>()->setTarget(getTarget());
-		getComponent<StateMachineComponent>()->setCurrentState(FLEE);
+		getComponent<StateMachineComponent>()->setCurrentState(DEAD);
 	}
 	else
 	{
-		if (collected)
+		if (enemyInRange && !collected)
 		{
-			getComponent<SeekComponent>()->setTarget(m_target);
-			getComponent<StateMachineComponent>()->setCurrentState(SEEK);
+			getComponent<FleeComponent>()->setTarget(getTarget());
+			getComponent<StateMachineComponent>()->setCurrentState(FLEE);
 		}
 		else
 		{
-			getComponent<StateMachineComponent>()->setCurrentState(WANDER);
+			if (collected)
+			{
+				getComponent<SeekComponent>()->setTarget(m_target);
+				getComponent<StateMachineComponent>()->setCurrentState(SEEK);
+			}
+			else
+			{
+				getComponent<StateMachineComponent>()->setCurrentState(WANDER);
+			}
 		}
 	}
 

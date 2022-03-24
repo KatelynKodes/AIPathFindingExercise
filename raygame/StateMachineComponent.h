@@ -4,6 +4,7 @@
 
 enum State
 {
+	DEAD,
 	FLEE,
 	WANDER,
 	SEEK

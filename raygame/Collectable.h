@@ -13,9 +13,13 @@ class Collectable :
 {
 public:
     Collectable(float x, float y, float maxSpeed, float maxForce, int color, Maze* maze);
+    ~Collectable();
 
     bool getCollected() { return m_collected; }
     void setCollected(bool value) { m_collected = value; }
+
+    bool getDead() { return m_isdead; }
+    void setDead(bool value) { m_isdead = value; }
 
     void setTarget(Actor* target);
     Actor* getTarget() { return m_target; }
@@ -36,6 +40,7 @@ private:
     Actor* m_target;
     
     bool m_collected;
+    bool m_isdead;
     float m_seekRange = 100;
 };
 

@@ -1,5 +1,6 @@
 #include "Ghost.h"
 #include "MazeScene.h"
+#include "Engine.h"
 #include "Wall.h"
 #include "raylib.h"
 #include "Transform2D.h"
@@ -24,6 +25,7 @@ Ghost::Ghost(float x, float y, float maxSpeed, float maxForce, int color, Maze* 
 Ghost::~Ghost()
 {
 	delete m_pathfindComponent;
+	Actor:: ~Actor();
 }
 
 void Ghost::update(float deltaTime)
@@ -31,16 +33,31 @@ void Ghost::update(float deltaTime)
 	Agent::update(deltaTime);
 
 	//checks if the maze's collectable length is greater than the current collectables
-	if (m_maze->getCollectables().getLength() > getCollectables().getLength())
+	if (m_maze->getCollectables().getLength() != getCollectables().getLength())
 	{
 		//Set the collectables to be the maze's collectables
 		setCollectables(m_maze->getCollectables());
 	}
 
-	//If all the collectables have been collected
-		// set the state of the enemy to flee
-	//If the collectables have not been collected and the enemy is not currently chasing a collectable
-		// Randomly select a collectables from the enemy's dynamic array
+	// If there is no target
+	if (!getTarget())
+	{
+		//set target
+		setTarget();
+	}
+	else
+	{
+		//If the target is a collectable
+		if (Collectable* target = dynamic_cast<Collectable*>(getTarget()))
+		{
+			//if the target is collected
+			if (target->getCollected() || target->getDead())
+			{
+				//set a new target
+				setTarget();
+			}
+		}
+	}
 }
 
 void Ghost::draw()
@@ -76,7 +93,7 @@ void Ghost::onCollision(Actor* other)
 	{
 		if (!collectable->getCollected())
 		{
-			//Destroy the collectable, set a new target for the collector
+			
 		}
 	}
 }
