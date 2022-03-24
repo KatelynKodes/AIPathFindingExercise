@@ -70,8 +70,6 @@ void Collectable::start()
 {
 	Agent::start();
 
-	m_isdead = false;
-
 	//Add the state machine components
 	addComponent<StateMachineComponent>();
 	getComponent<StateMachineComponent>()->setCurrentState(WANDER); //Set the current state to wander

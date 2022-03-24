@@ -4,6 +4,7 @@
 #include "Wall.h"
 #include "raylib.h"
 #include "Transform2D.h"
+#include "AABBCollider.h"
 #include "PathfindComponent.h"
 #include "MoveComponent.h"
 #include "SpriteComponent.h"
@@ -20,6 +21,9 @@ Ghost::Ghost(float x, float y, float maxSpeed, float maxForce, int color, Maze* 
 	m_pathfindComponent->setColor(color);
 	addComponent(m_pathfindComponent);
 	addComponent(new SpriteComponent("Images/enemy.png"));
+
+	//set collider for the collectable so it can be collided with
+	setCollider(new AABBCollider(Maze::TILE_SIZE, Maze::TILE_SIZE, this));
 }
 
 Ghost::~Ghost()
@@ -89,11 +93,12 @@ void Ghost::onCollision(Actor* other)
 			// Destroy the ghost
 		}
 	}
-	else if (Collectable* collectable = dynamic_cast<Collectable*>(other))
+	
+	if (Collectable* collectable = dynamic_cast<Collectable*>(other))
 	{
 		if (!collectable->getCollected())
 		{
-			
+			collectable->setDead(true);
 		}
 	}
 }
@@ -112,7 +117,7 @@ void Ghost::setTarget()
 		int index = rand() % getCollectables().getLength();
 
 		// if the collectable isn't collected...
-		if (!getCollectables()[index]->getCollected())
+		if (!getCollectables()[index]->getCollected() && !getCollectables()[index]->getDead())
 			// set the target
 			setTarget(getCollectables()[index]);
 	}

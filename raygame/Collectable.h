@@ -39,8 +39,8 @@ private:
     Maze* m_maze;
     Actor* m_target;
     
-    bool m_collected;
-    bool m_isdead;
+    bool m_collected = false;
+    bool m_isdead = false;
     float m_seekRange = 100;
 };
 
