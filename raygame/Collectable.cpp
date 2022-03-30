@@ -86,7 +86,7 @@ void Collectable::update(float deltaTime)
 	bool enemyInRange = EnemyInRange();
 	bool collected = getCollected();
 
-	if (m_isdead)
+	if (m_isDead)
 	{
 		getComponent<StateMachineComponent>()->setCurrentState(DEAD);
 	}

@@ -35,7 +35,16 @@ public:
 	/// <param name="target">The new target</param>
 	void setTarget();
 
+	/// <summary>
+	/// Set the collectables the ghost should be able to collect
+	/// </summary>
+	/// <param name="collectableList"> The new list to set the collectable list to </param>
 	void setCollectables(DynamicArray<Collectable*> collectableList);
+
+	/// <summary>
+	/// Get the ghosts current collectables list
+	/// </summary>
+	/// <returns> A dynamic array consisting of Collectable pointers </returns>
 	DynamicArray<Collectable*> getCollectables() { return m_collectables; }
 
 private:
