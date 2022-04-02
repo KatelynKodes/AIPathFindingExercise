@@ -50,6 +50,8 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 	openList.addItem(start);
 	Node* currentNode = openList[0];
 	float gScore = 0;
+	float fScore = 0;
+	float hScore = 0;
 
 	while (openList.getLength() > 0)
 	{
@@ -76,12 +78,17 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 				{
 					// Calculate the gscore of the current edge
 					gScore = currentNode->gScore + currentNode->edges[i].cost;
+					hScore = getManhattenDistance(currentNode, goal);
+					fScore = gScore + hScore;
 
 					//if the open list does not contain the current node's target..
 					if (!openList.contains(currentNode->edges[i].target))
 					{
 						//Set the node's gscore to be the gscore variable
 						currentNode->edges[i].target->gScore = gScore;
+						currentNode->edges[i].target->hScore = hScore;
+						currentNode->edges[i].target->fScore = fScore;
+
 						//..add the item to the list
 						openList.addItem(currentNode->edges[i].target);
 
@@ -92,10 +99,10 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 					else
 					{
 						//If current node's gscore is greater than the current gscore...
-						if (currentNode->edges[i].target->gScore > gScore)
+						if (currentNode->edges[i].target->fScore > fScore)
 						{
 							//...set the targets gscore to be the current gscore
-							currentNode->edges[i].target->gScore = gScore;
+							currentNode->edges[i].target->fScore = fScore;
 
 							//Set it's previous to be it's current node
 							currentNode->edges[i].target->previous = currentNode;
@@ -109,8 +116,8 @@ DynamicArray<NodeGraph::Node*> NodeGraph::findPath(Node* start, Node* goal)
 
 void NodeGraph::drawGraph(Node* start)
 {
-	//DynamicArray<Node*> drawnList = DynamicArray<Node*>();
-	//drawConnectedNodes(start, drawnList);
+	DynamicArray<Node*> drawnList = DynamicArray<Node*>();
+	drawConnectedNodes(start, drawnList);
 }
 
 void NodeGraph::drawNode(Node* node, float size)
@@ -171,4 +178,9 @@ void NodeGraph::resetConnectedNodes(Node* node, DynamicArray<Node*>& resetList)
 			resetConnectedNodes(node->edges[i].target, resetList);
 		}
 	}
+}
+
+float NodeGraph::getManhattenDistance(Node* start, Node* end)
+{
+	return abs(start->position.x - end->position.x) + abs(start->position.y - end->position.y);
 }

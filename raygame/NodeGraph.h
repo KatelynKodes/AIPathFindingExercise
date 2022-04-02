@@ -67,4 +67,6 @@ namespace NodeGraph
 	/// <param name="node"> The root node </param>
 	/// <param name="resetList"> The list of nodes that have already been reset </param>
 	void resetConnectedNodes(Node* node, DynamicArray<Node*>& resetList);
+
+	float getManhattenDistance(Node* start, Node* end);
 }
